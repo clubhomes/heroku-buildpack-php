@@ -152,8 +152,9 @@ export NEWRELIC_FILENAME="${NEWRELIC_FILE}.tgz"
 export NEW_RELIC_LICENSE_KEY="1044aab633dd2e36c5060a89929ff1d319fc9aa3"
 export BUILD_DIR_NR=${BUILD_DIR}
 
-   echo "-----> Installing newrelic"
-   tar zxvf $LP_DIR/src/${NEWRELIC_FILENAME} -C ${BUILD_DIR}/local
-   ${BUILD_DIR}/local/${NEWRELIC_FILE}/bin/newrelic-license
-   ${BUILD_DIR}/local/${NEWRELIC_FILE}/bin/newrelic-daemon -c ${BUILD_DIR}/local/${NEWRELIC_FILE}/etc/newrelic.cfg -d error
+echo "-----> Installing newrelic"
+tar zxvf $LP_DIR/src/${NEWRELIC_FILENAME} -C ${BUILD_DIR}/local
+echo "Launching newrelic"
+exec ${BUILD_DIR}/local/${NEWRELIC_FILE}/bin/newrelic-license
+exec ${BUILD_DIR}/local/${NEWRELIC_FILE}/bin/newrelic-daemon -c ${BUILD_DIR}/local/${NEWRELIC_FILE}/etc/newrelic.cfg -d error
 
