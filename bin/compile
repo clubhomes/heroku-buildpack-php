@@ -9,6 +9,7 @@ APACHE_VERSION="2.4.6"
 APACHE_PATH="apache"
 PHP_VERSION="5.5.4"
 PHP_PATH="php"
+
 BUILDPACK_VERSION="2.0-a9"
 OPT_BUILDPACK_URL="http://vulcan-wlian.herokuapp.com/output/d7c61c2c-835c-47f5-a351-f1f014556b04"
 
@@ -141,3 +142,18 @@ if [ -d $BUILD_DIR/www/.heroku -a -f $BUILD_DIR/www/.heroku/compile.sh ]; then
     /usr/bin/env bash $BUILD_DIR/www/.heroku/compile.sh
     rm $BUILD_DIR/www/.heroku/compile.sh
 fi
+
+
+# newrelic
+
+export NEWRELIC_FILE="newrelic-2.9.5.78-heroku"
+export NEWRELIC_FILENAME="${NEWRELIC_FILE}.tgz"
+# export NEW_RELIC_LICENSE_KEY="b0de1f598f32469e0fae7c76e857eaa5b623fb96"
+export NEW_RELIC_LICENSE_KEY="1044aab633dd2e36c5060a89929ff1d319fc9aa3"
+export BUILD_DIR_NR=${BUILD_DIR}
+
+   echo "-----> Installing newrelic"
+   tar zxvf $LP_DIR/src/${NEWRELIC_FILENAME} -C ${BUILD_DIR}/local
+   ${BUILD_DIR}/local/${NEWRELIC_FILE}/bin/newrelic-license
+   ${BUILD_DIR}/local/${NEWRELIC_FILE}/bin/newrelic-daemon -c ${BUILD_DIR}/local/${NEWRELIC_FILE}/etc/newrelic.cfg -d error
+
