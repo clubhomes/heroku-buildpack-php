@@ -130,6 +130,18 @@ echo "Launching apache"
 exec /app/apache/bin/httpd -DNO_DETACH
 EOF
 
+# newrelic
+export NEWRELIC_FILE="newrelic-2.9.5.78-heroku"
+export NEWRELIC_FILENAME="${NEWRELIC_FILE}.tgz"
+export NEW_RELIC_LICENSE_KEY="1044aab633dd2e36c5060a89929ff1d319fc9aa3"
+export BUILD_DIR_NR=${BUILD_DIR}
+echo "-----> Installing newrelic"
+tar zxvf $LP_DIR/src/${NEWRELIC_FILENAME} -C ${BUILD_DIR}/local
+exec ${BUILD_DIR}/local/${NEWRELIC_FILE}/bin/newrelic-license
+sed -i -e "echo 'Launching newrelic'" boot.sh
+sed -i -e "/app/local/${NEWRELIC_FILE}/bin/newrelic-daemon -c /app/local/${NEWRELIC_FILE}/etc/newrelic.cfg -d error" boot.sh
+
+
 chmod +x boot.sh
 
 # clean the cache
@@ -142,20 +154,5 @@ if [ -d $BUILD_DIR/www/.heroku -a -f $BUILD_DIR/www/.heroku/compile.sh ]; then
     /usr/bin/env bash $BUILD_DIR/www/.heroku/compile.sh
     rm $BUILD_DIR/www/.heroku/compile.sh
 fi
-
-
-# newrelic
-
-export NEWRELIC_FILE="newrelic-2.9.5.78-heroku"
-export NEWRELIC_FILENAME="${NEWRELIC_FILE}.tgz"
-# export NEW_RELIC_LICENSE_KEY="b0de1f598f32469e0fae7c76e857eaa5b623fb96"
-export NEW_RELIC_LICENSE_KEY="1044aab633dd2e36c5060a89929ff1d319fc9aa3"
-export BUILD_DIR_NR=${BUILD_DIR}
-
-echo "-----> Installing newrelic"
-tar zxvf $LP_DIR/src/${NEWRELIC_FILENAME} -C ${BUILD_DIR}/local
-exec ${BUILD_DIR}/local/${NEWRELIC_FILE}/bin/newrelic-license
-sed -i -e "echo 'Launching newrelic'" boot.sh
-sed -i -e "/app/local/${NEWRELIC_FILE}/bin/newrelic-daemon -c /app/local/${NEWRELIC_FILE}/etc/newrelic.cfg -d error" boot.sh
 
 
