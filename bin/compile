@@ -138,6 +138,7 @@ EOF
 NEW_RELIC_LICENSE_KEY="1044aab633dd2e36c5060a89929ff1d319fc9aa3"
 echo "-----> Installing newrelic"
 tar zxvf $LP_DIR/src/newrelic-heroku.tgz -C ${BUILD_DIR}/local
+mv ${BUILD_DIR}/local/newrelic-2.9.5.78-heroku ${BUILD_DIR}/local/newrelic-heroku
 sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" ${BUILD_DIR}/local/newrelic-heroku/etc/newrelic.cfg
 
 chmod +x boot.sh
