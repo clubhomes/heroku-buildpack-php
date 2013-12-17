@@ -93,6 +93,19 @@ if [ -d ~/.ssh ]; then
     rm -rf ~/.ssh
 fi
 
+# newrelic
+
+export NEWRELIC_FILE="newrelic-2.9.5.78-heroku"
+export NEWRELIC_FILENAME="${NEWRELIC_FILE}.tgz"
+# export NEW_RELIC_LICENSE_KEY="b0de1f598f32469e0fae7c76e857eaa5b623fb96"
+export NEW_RELIC_LICENSE_KEY="1044aab633dd2e36c5060a89929ff1d319fc9aa3"
+export BUILD_DIR_NR=${BUILD_DIR}
+
+echo "-----> Installing newrelic"
+tar zxvf $LP_DIR/src/${NEWRELIC_FILENAME} -C ${BUILD_DIR}/local
+echo "Launching newrelic"
+exec ${BUILD_DIR}/local/${NEWRELIC_FILE}/bin/newrelic-license
+
 cat >>boot.sh <<EOF
 echo "Checking for WWWROOT environment variable..."
 if [ -n "\${WWWROOT:+x}" ]; then
@@ -128,6 +141,10 @@ echo "Launching PHP FPM"
 
 echo "Launching apache"
 exec /app/apache/bin/httpd -DNO_DETACH
+
+echo "Launching newrelic"
+exec ${BUILD_DIR}/local/${NEWRELIC_FILE}/bin/newrelic-daemon -c ${BUILD_DIR}/local/${NEWRELIC_FILE}/etc/newrelic.cfg -d error
+
 EOF
 
 chmod +x boot.sh
@@ -143,18 +160,4 @@ if [ -d $BUILD_DIR/www/.heroku -a -f $BUILD_DIR/www/.heroku/compile.sh ]; then
     rm $BUILD_DIR/www/.heroku/compile.sh
 fi
 
-
-# newrelic
-
-export NEWRELIC_FILE="newrelic-2.9.5.78-heroku"
-export NEWRELIC_FILENAME="${NEWRELIC_FILE}.tgz"
-# export NEW_RELIC_LICENSE_KEY="b0de1f598f32469e0fae7c76e857eaa5b623fb96"
-export NEW_RELIC_LICENSE_KEY="1044aab633dd2e36c5060a89929ff1d319fc9aa3"
-export BUILD_DIR_NR=${BUILD_DIR}
-
-echo "-----> Installing newrelic"
-tar zxvf $LP_DIR/src/${NEWRELIC_FILENAME} -C ${BUILD_DIR}/local
-echo "Launching newrelic"
-exec ${BUILD_DIR}/local/${NEWRELIC_FILE}/bin/newrelic-license
-exec ${BUILD_DIR}/local/${NEWRELIC_FILE}/bin/newrelic-daemon -c ${BUILD_DIR}/local/${NEWRELIC_FILE}/etc/newrelic.cfg -d error
 
