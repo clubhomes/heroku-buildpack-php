@@ -135,14 +135,10 @@ echo "Launching newrelic"
 EOF
 
 # newrelic
-export NEWRELIC_FILE="newrelic-heroku"
-export NEWRELIC_FILENAME="${NEWRELIC_FILE}.tgz"
-export NEW_RELIC_LICENSE_KEY="1044aab633dd2e36c5060a89929ff1d319fc9aa3"
-export BUILD_DIR_NR=${BUILD_DIR}
+NEW_RELIC_LICENSE_KEY="1044aab633dd2e36c5060a89929ff1d319fc9aa3"
 echo "-----> Installing newrelic"
-tar zxvf $LP_DIR/src/${NEWRELIC_FILENAME} -C ${BUILD_DIR}/local
-exec ${BUILD_DIR}/local/${NEWRELIC_FILE}/bin/newrelic-license
-
+tar zxvf $LP_DIR/src/newrelic-heroku.tgz -C ${BUILD_DIR}/local
+sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" ${BUILD_DIR}/local/newrelic-heroku/etc/newrelic.cfg
 
 chmod +x boot.sh
 
