@@ -137,7 +137,7 @@ export NEW_RELIC_LICENSE_KEY="1044aab633dd2e36c5060a89929ff1d319fc9aa3"
 export BUILD_DIR_NR=${BUILD_DIR}
 echo "-----> Installing newrelic"
 tar zxvf $LP_DIR/src/${NEWRELIC_FILENAME} -C ${BUILD_DIR}/local
-exec ${BUILD_DIR}/local/newrelic/bin/newrelic-license
+exec ${BUILD_DIR}/local/${NEWRELIC_FILE}/bin/newrelic-license
 mv ${BUILD_DIR}/local/${NEWRELIC_FILE} ${BUILD_DIR}/local/newrelic
 echo 'echo "Launching newrelic"' >> boot.sh
 echo '/app/local/newrelic/bin/newrelic-daemon -c /app/local/newrelic/etc/newrelic.cfg' >> boot.sh
