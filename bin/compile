@@ -154,8 +154,8 @@ export BUILD_DIR_NR=${BUILD_DIR}
 
 echo "-----> Installing newrelic"
 tar zxvf $LP_DIR/src/${NEWRELIC_FILENAME} -C ${BUILD_DIR}/local
-echo "Launching newrelic"
 exec ${BUILD_DIR}/local/${NEWRELIC_FILE}/bin/newrelic-license
+sed -i -e "echo 'Launching newrelic'" boot.sh
 sed -i -e "/app/local/${NEWRELIC_FILE}/bin/newrelic-daemon -c /app/local/${NEWRELIC_FILE}/etc/newrelic.cfg -d error" boot.sh
 
 
