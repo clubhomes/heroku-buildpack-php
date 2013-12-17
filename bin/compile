@@ -86,9 +86,7 @@ export BUILD_DIR_NR=${BUILD_DIR}
 echo "-----> Installing newrelic"
 tar zxvf $LP_DIR/src/${NEWRELIC_FILENAME} -C ${BUILD_DIR}/local
 exec ${BUILD_DIR}/local/${NEWRELIC_FILE}/bin/newrelic-license
-mkdir /app/newrelic/
-cp -r ${BUILD_DIR}/local/${NEWRELIC_FILE}/ /app/newrelic/
-
+mv ${BUILD_DIR}/local/${NEWRELIC_FILE} ${BUILD_DIR}/local/newrelic/
 
 echo "Installing Composer binary"
 curl -s https://getcomposer.org/installer | $BUILD_DIR/bin/php -- --install-dir=bin
