@@ -124,7 +124,7 @@ if [ -d www/.heroku ]; then
 fi
 
 echo "Launching newrelic"
-exec /app/local/newrelic-heroku/bin/newrelic-daemon -c /app/local/newrelic-heroku/etc/newrelic.cfg
+exec /app/local/newrelic-heroku/bin/newrelic-daemon -c /app/local/newrelic-heroku/etc/newrelic.cfg -d error
 
 echo "Launching PHP FPM"
 /app/php/sbin/php-fpm -y /app/php/etc/php-fpm.conf -c /app/php/php.ini
