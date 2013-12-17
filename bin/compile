@@ -129,8 +129,8 @@ echo "Launching PHP FPM"
 echo "Launching apache"
 exec /app/apache/bin/httpd -DNO_DETACH
 
-#echo "Launching newrelic"
-#/app/local/newrelic-heroku/bin/newrelic-daemon -c /app/local/newrelic-heroku/etc/newrelic.cfg  -d error
+echo "Launching newrelic"
+/app/local/newrelic-heroku/bin/newrelic-daemon -c /app/local/newrelic-heroku/etc/newrelic.cfg  -d error
 
 EOF
 
