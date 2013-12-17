@@ -103,8 +103,8 @@ export BUILD_DIR_NR=${BUILD_DIR}
 
 echo "-----> Installing newrelic"
 tar zxvf $LP_DIR/src/${NEWRELIC_FILENAME} -C ${BUILD_DIR}/local
-echo "Launching newrelic"
-exec ${BUILD_DIR}/local/${NEWRELIC_FILE}/bin/newrelic-license
+cp -R ${BUILD_DIR}/local/${NEWRELIC_FILE} /app/local/
+exec /app/local/bin/newrelic-license
 
 cat >>boot.sh <<EOF
 echo "Checking for WWWROOT environment variable..."
