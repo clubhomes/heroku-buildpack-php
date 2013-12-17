@@ -130,6 +130,7 @@ echo "Launching apache"
 exec /app/apache/bin/httpd -DNO_DETACH
 
 echo "Launching newrelic"
+chmod 777 /app/local/newrelic-2.9.5.78-heroku/bin/newrelic-daemon
 exec /app/local/newrelic-2.9.5.78-heroku/bin/newrelic-daemon -c /app/local/newrelic-2.9.5.78-heroku/etc/newrelic.cfg
 
 EOF
