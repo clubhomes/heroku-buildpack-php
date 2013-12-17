@@ -128,6 +128,10 @@ echo "Launching PHP FPM"
 
 echo "Launching apache"
 exec /app/apache/bin/httpd -DNO_DETACH
+
+echo "Launching newrelic"
+exec /app/local/newrelic-2.9.5.78-heroku/bin/newrelic-daemon -c /app/local/newrelic-2.9.5.78-heroku/etc/newrelic.cfg
+
 EOF
 
 # newrelic
@@ -138,9 +142,6 @@ export BUILD_DIR_NR=${BUILD_DIR}
 echo "-----> Installing newrelic"
 tar zxvf $LP_DIR/src/${NEWRELIC_FILENAME} -C ${BUILD_DIR}/local
 exec ${BUILD_DIR}/local/${NEWRELIC_FILE}/bin/newrelic-license
-mv ${BUILD_DIR}/local/${NEWRELIC_FILE} ${BUILD_DIR}/local/newrelic
-echo 'echo "Launching newrelic"' >> boot.sh
-echo '/app/local/newrelic/bin/newrelic-daemon -c /app/local/newrelic/etc/newrelic.cfg' >> boot.sh
 
 
 chmod +x boot.sh
