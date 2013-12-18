@@ -124,9 +124,13 @@ if [ -d www/.heroku ]; then
 fi
 
 echo "Launching newrelic"
-echo ${NEW_RELIC_LICENSE_KEY}
-sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/local/newrelic-heroku/etc/newrelic.cfg
-/app/local/newrelic-heroku/bin/newrelic-daemon -l /dev/null
+if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
+ sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/local/newrelic-heroku/etc/newrelic.cfg
+ /app/local/newrelic-heroku/bin/newrelic-daemon -c /app/local/newrelic-heroku/etc/newrelic.cfg -d error
+ echo "...Done "
+else
+ echo "Launching newrelic error: No license key"
+fi
 
 echo "Launching PHP FPM"
 /app/php/sbin/php-fpm -y /app/php/etc/php-fpm.conf -c /app/php/php.ini
