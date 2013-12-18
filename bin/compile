@@ -125,7 +125,8 @@ fi
 
 echo "Launching newrelic"
 if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
- /app/local/newrelic-heroku/bin/newrelic-daemon -l /dev/null
+ /app/local/newrelic-heroku/bin/newrelic-daemon -c /app/local/newrelic-heroku/etc/newrelic.cfg
+ echo ${NEW_RELIC_LICENSE_KEY}
  echo "...Done "
 else
  echo "Launching newrelic error: No license key"
