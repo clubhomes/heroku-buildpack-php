@@ -124,8 +124,9 @@ if [ -d www/.heroku ]; then
 fi
 
 echo "Launching newrelic"
-sed -i "s|REPLACE_WITH_REAL_KEY|$NR_LICENSE_KEY|g" /app/local/newrelic-heroku/etc/newrelic.cfg
-/app/local/newrelic-heroku/bin/newrelic-daemon -l FALSE
+echo ${NEW_RELIC_LICENSE_KEY}
+sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/local/newrelic-heroku/etc/newrelic.cfg
+/app/local/newrelic-heroku/bin/newrelic-daemon -l /dev/null
 
 echo "Launching PHP FPM"
 /app/php/sbin/php-fpm -y /app/php/etc/php-fpm.conf -c /app/php/php.ini
@@ -137,8 +138,6 @@ EOF
 
 # newrelic
 echo "-----> Installing newrelic"
-echo $NEW_RELIC_LICENSE_KEY
-export NR_LICENSE_KEY=$NEW_RELIC_LICENSE_KEY
 tar zxvf $LP_DIR/src/newrelic-heroku.tgz -C ${BUILD_DIR}/local
 
 chmod +x boot.sh
