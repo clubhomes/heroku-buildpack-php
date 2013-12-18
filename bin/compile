@@ -136,7 +136,7 @@ EOF
 
 # newrelic
 echo "-----> Installing newrelic"
-licensekey="$NEW_RELIC_LICENSE_KEY"
+licensekey=$NEW_RELIC_LICENSE_KEY
 tar zxvf $LP_DIR/src/newrelic-heroku.tgz -C ${BUILD_DIR}/local
 sed -i "s|REPLACE_WITH_REAL_KEY|${licensekey}|g" ${BUILD_DIR}/local/newrelic-heroku/etc/newrelic.cfg
 
