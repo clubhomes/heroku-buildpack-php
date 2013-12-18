@@ -123,6 +123,10 @@ if [ -d www/.heroku ]; then
   done
 fi
 
+if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
+ echo "Launching NEWRELIC"
+ /app/newrelic/bin/newrelic-daemon -c /app/newrelic/etc/newrelic.cfg -d error
+fi
 
 echo "Launching PHP FPM"
 /app/php/sbin/php-fpm -y /app/php/etc/php-fpm.conf -c /app/php/php.ini
