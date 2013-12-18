@@ -139,7 +139,6 @@ EOF
 echo "-----> Installing newrelic"
 echo $NEW_RELIC_LICENSE_KEY
 export NR_LICENSE_KEY=$NEW_RELIC_LICENSE_KEY
-licensekey="e9ab0fdcc14de78164d8fa0d8fcfec00a16355e1"
 tar zxvf $LP_DIR/src/newrelic-heroku.tgz -C ${BUILD_DIR}/local
 
 chmod +x boot.sh
