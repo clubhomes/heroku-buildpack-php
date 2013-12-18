@@ -123,14 +123,6 @@ if [ -d www/.heroku ]; then
   done
 fi
 
-echo "Launching newrelic"
-if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
- /app/local/newrelic-heroku/bin/newrelic-daemon -c /app/local/newrelic-heroku/etc/newrelic.cfg -l /dev/null
- echo ${NEW_RELIC_LICENSE_KEY}
- echo "...Done "
-else
- echo "Launching newrelic error: No license key"
-fi
 
 echo "Launching PHP FPM"
 /app/php/sbin/php-fpm -y /app/php/etc/php-fpm.conf -c /app/php/php.ini
@@ -140,15 +132,33 @@ exec /app/apache/bin/httpd -DNO_DETACH
 
 EOF
 
-# newrelic
-echo "-----> Installing newrelic"
-export NEW_RELIC_LICENSE_KEY="e9ab0fdcc14de78164d8fa0d8fcfec00a16355e1"
-tar zxvf $LP_DIR/src/newrelic-heroku.tgz -C ${BUILD_DIR}/local
-if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
- sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" ${BUILD_DIR}/local/newrelic-heroku/etc/newrelic.cfg
+
+# NEWRELIC
+echo "Installing NEWRELIC"
+cd /app
+curl -L "http://download.newrelic.com/php_agent/release/newrelic-php5-4.3.5.33-linux.tar.gz" -o - | tar xz
+pushd /app/newrelic-php5-4.3.5.33-linux
+mkdir -p /app/newrelic/{bin,etc} /app/newrelic/var/{run,log} /app/newrelic/var/log/newrelic
+cp -f /app/newrelic-php5-4.3.5.33-linux/daemon/newrelic-daemon.x64 /app/newrelic/bin/newrelic-daemon
+cp -f /app/newrelic-php5-4.3.5.33-linux/scripts/newrelic.cfg.template /app/newrelic/etc/newrelic.cfg
+sed -i 's|var|app/newrelic/var|g' /app/newrelic/etc/newrelic.cfg
+sed -i 's|#ssl=true|ssl=true|g' /app/newrelic/etc/newrelic.cfg
+sed -i 's|#pidfile=|pidfile=|g' /app/newrelic/etc/newrelic.cfg
+sed -i 's|#logfile=|logfile=|g' /app/newrelic/etc/newrelic.cfg
+
+cat > /app/newrelic/bin/newrelic-license <<EOF
+#!/usr/bin/env bash
+if [ -f /app/newrelic/NEWRELIC_VERSION ]; then
+    sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/php/etc/*newrelic*.ini
 else
- echo "Installing newrelic error: No license key"
+    sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/newrelic/etc/newrelic.cfg
 fi
+EOF
+
+chmod +x /app/newrelic/bin/newrelic-license
+echo "4.3.5.33" > /app/newrelic/NEWRELIC_VERSION
+
+
 
 chmod +x boot.sh
 
