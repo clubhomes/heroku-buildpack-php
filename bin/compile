@@ -145,19 +145,8 @@ sed -i 's|var|app/newrelic/var|g' /app/newrelic/etc/newrelic.cfg
 sed -i 's|#ssl=true|ssl=true|g' /app/newrelic/etc/newrelic.cfg
 sed -i 's|#pidfile=|pidfile=|g' /app/newrelic/etc/newrelic.cfg
 sed -i 's|#logfile=|logfile=|g' /app/newrelic/etc/newrelic.cfg
-
-cat > /app/newrelic/bin/newrelic-license <<EOF
-#!/usr/bin/env bash
-if [ -f /app/newrelic/NEWRELIC_VERSION ]; then
-    sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/php/etc/*newrelic*.ini
-else
-    sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/newrelic/etc/newrelic.cfg
-fi
-EOF
-
-chmod +x /app/newrelic/bin/newrelic-license
 echo "4.3.5.33" > /app/newrelic/NEWRELIC_VERSION
-
+sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/newrelic/etc/newrelic.cfg
 
 
 chmod +x boot.sh
