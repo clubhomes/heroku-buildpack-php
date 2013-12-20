@@ -126,27 +126,10 @@ fi
 
 # NEWRELIC
 if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
- echo "Installing NEWRELIC"
- cd /app
- curl -L "http://download.newrelic.com/php_agent/release/newrelic-php5-4.3.5.33-linux.tar.gz" -o - | tar xz
- pushd /app/newrelic-php5-4.3.5.33-linux
- mkdir -p /app/newrelic/{bin,etc} /app/newrelic/var/{run,log} /app/newrelic/var/log/newrelic
- cp -f /app/newrelic-php5-4.3.5.33-linux/daemon/newrelic-daemon.x64 /app/newrelic/bin/newrelic-daemon
- cp -f /app/newrelic-php5-4.3.5.33-linux/scripts/newrelic.cfg.template /app/newrelic/etc/newrelic.cfg
- sed -i 's|var|app/newrelic/var|g' /app/newrelic/etc/newrelic.cfg
- sed -i 's|#ssl=true|ssl=true|g' /app/newrelic/etc/newrelic.cfg
- sed -i 's|#pidfile=|pidfile=|g' /app/newrelic/etc/newrelic.cfg
- sed -i 's|#logfile=|logfile=|g' /app/newrelic/etc/newrelic.cfg
- echo "4.3.5.33" > /app/newrelic/NEWRELIC_VERSION
- rm -Rf /app/newrelic-php5-4.3.5.33-linux
- echo "Installing ..Done"
-else
- echo "Launching NEWRELIC NotFound Key.."
-fi
-if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
 echo "Launching NEWRELIC"
+ sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/lib/Newrelicheroku/etc/newrelic.cfg
  sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/php/php.ini
- /app/newrelic/bin/newrelic-daemon -c /app/newrelic/etc/newrelic.cfg -d error
+ /app/lib/Newrelicheroku/bin/newrelic-daemon -c /app/lib/Newrelicheroku/etc/newrelic.cfg -d error
 fi
 
 echo "Launching PHP FPM"
