@@ -18,7 +18,6 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
 
-export NEW_RELIC_LICENSE_KEY_VAL=${NEW_RELIC_LICENSE_KEY}
 
 # include .files when moving things around
 shopt -s dotglob
@@ -127,10 +126,8 @@ if [ -d www/.heroku ]; then
 fi
 
 # NEWRELIC
-if [ "\${NEW_RELIC_LICENSE_KEY_VAL}" ]; then
+if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
 echo "Launching NEWRELIC"
- sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY_VAL}|g" /app/www/lib/Newrelicheroku/etc/newrelic.cfg
- sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY_VAL}|g" /app/php/php.ini
  chmod +x /app/www/lib/Newrelicheroku/bin/newrelic-daemon
  /app/www/lib/Newrelicheroku/bin/newrelic-daemon -c /app/www/lib/Newrelicheroku/etc/newrelic.cfg -d error -l /dev/null
 fi
@@ -145,6 +142,12 @@ exec /app/apache/bin/httpd -DNO_DETACH
 EOF
 
 chmod +x boot.sh
+
+# NEWRELIC KEY
+if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
+ sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/www/lib/Newrelicheroku/etc/newrelic.cfg
+ sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/php/php.ini
+fi
 
 
 # clean the cache
