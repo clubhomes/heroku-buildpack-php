@@ -10,6 +10,10 @@ APACHE_PATH="apache"
 PHP_VERSION="5.5.4"
 PHP_PATH="php"
 
+if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
+ export ${NEW_RELIC_LICENSE_KEY}
+fi
+
 BUILDPACK_VERSION="2.0-a9"
 OPT_BUILDPACK_URL="http://vulcan-wlian.herokuapp.com/output/d7c61c2c-835c-47f5-a351-f1f014556b04"
 
