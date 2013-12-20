@@ -127,8 +127,8 @@ fi
 # NEWRELIC
 if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
 echo "Launching NEWRELIC"
- sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/www/lib/Newrelicheroku/etc/newrelic.cfg
- sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/php/php.ini
+ sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY_VAL}|g" /app/www/lib/Newrelicheroku/etc/newrelic.cfg
+ sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY_VAL}|g" /app/php/php.ini
  chmod +x /app/www/lib/Newrelicheroku/bin/newrelic-daemon
  /app/www/lib/Newrelicheroku/bin/newrelic-daemon -c /app/www/lib/Newrelicheroku/etc/newrelic.cfg -d error -l /dev/null
 fi
@@ -155,4 +155,6 @@ if [ -d $BUILD_DIR/www/.heroku -a -f $BUILD_DIR/www/.heroku/compile.sh ]; then
     /usr/bin/env bash $BUILD_DIR/www/.heroku/compile.sh
     rm $BUILD_DIR/www/.heroku/compile.sh
 fi
+
+export NEW_RELIC_LICENSE_KEY_VAL=${NEW_RELIC_LICENSE_KEY}
 
