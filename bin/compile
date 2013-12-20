@@ -106,7 +106,7 @@ if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
  echo "4.3.5.33" > /app/newrelic/NEWRELIC_VERSION
  rm -Rf /app/newrelic-php5-4.3.5.33-linux
  echo "Installing ..Done"
- cd
+ cd /app
 else
  echo "Launching NEWRELIC NotFound Key.."
 fi
