@@ -139,6 +139,18 @@ EOF
 chmod +x boot.sh
 
 
+# clean the cache
+rm -rf $CACHE_DIR/*
+
+# run a post build script from the app
+
+if [ -d $BUILD_DIR/www/.heroku -a -f $BUILD_DIR/www/.heroku/compile.sh ]; then
+    chmod 0755 $BUILD_DIR/www/.heroku/compile.sh
+    /usr/bin/env bash $BUILD_DIR/www/.heroku/compile.sh
+    rm $BUILD_DIR/www/.heroku/compile.sh
+fi
+
+
 # NEWRELIC
 echo "Installing NEWRELIC"
 cd /app
@@ -154,15 +166,3 @@ sed -i 's|#logfile=|logfile=|g' /app/newrelic/etc/newrelic.cfg
 echo "4.3.5.33" > /app/newrelic/NEWRELIC_VERSION
 sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/newrelic/etc/newrelic.cfg
 cd
-
-# clean the cache
-rm -rf $CACHE_DIR/*
-
-# run a post build script from the app
-
-if [ -d $BUILD_DIR/www/.heroku -a -f $BUILD_DIR/www/.heroku/compile.sh ]; then
-    chmod 0755 $BUILD_DIR/www/.heroku/compile.sh
-    /usr/bin/env bash $BUILD_DIR/www/.heroku/compile.sh
-    rm $BUILD_DIR/www/.heroku/compile.sh
-fi
-
