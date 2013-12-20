@@ -132,6 +132,7 @@ echo "Launching NEWRELIC"
  /app/lib/Newrelicheroku/bin/newrelic-daemon -c /app/lib/Newrelicheroku/etc/newrelic.cfg -d error
 fi
 
+
 echo "Launching PHP FPM"
 /app/php/sbin/php-fpm -y /app/php/etc/php-fpm.conf -c /app/php/php.ini
 
