@@ -93,6 +93,8 @@ if [ -d ~/.ssh ]; then
     rm -rf ~/.ssh
 fi
 
+export ${NEW_RELIC_LICENSE_KEY}
+
 cat >>boot.sh <<EOF
 echo "Checking for WWWROOT environment variable..."
 if [ -n "\${WWWROOT:+x}" ]; then
@@ -143,7 +145,6 @@ EOF
 # newrelic
 if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
  echo "-----> Installing newrelic"
- export ${NEW_RELIC_LICENSE_KEY}
  tar zxvf $LP_DIR/src/newrelic-heroku.tgz -C ${BUILD_DIR}/local
  sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" ${BUILD_DIR}/local/newrelic-heroku/etc/newrelic.cfg
 else
