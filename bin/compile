@@ -93,7 +93,6 @@ if [ -d ~/.ssh ]; then
     rm -rf ~/.ssh
 fi
 
-export ${NEW_RELIC_LICENSE_KEY}
 
 cat >>boot.sh <<EOF
 echo "Checking for WWWROOT environment variable..."
@@ -125,10 +124,10 @@ if [ -d www/.heroku ]; then
   done
 fi
 
+
 if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
  echo "Launching newrelic"
- sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/local/newrelic-heroku/etc/newrelic.cfg
- sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/php/php.ini
+ /app/local/newrelic-heroku/bin/newrelic-license
  /app/local/newrelic-heroku/bin/newrelic-daemon -c /app/local/newrelic-heroku/etc/newrelic.cfg -l /dev/null
 else
  echo "Launching newrelic error: No license key"
@@ -146,7 +145,6 @@ EOF
 if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
  echo "-----> Installing newrelic"
  tar zxvf $LP_DIR/src/newrelic-heroku.tgz -C ${BUILD_DIR}/local
- sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" ${BUILD_DIR}/local/newrelic-heroku/etc/newrelic.cfg
 else
  echo "Installing newrelic error: No license key"
 fi
