@@ -18,7 +18,6 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 LP_DIR=`cd $(dirname $0); cd ..; pwd`
 
-
 # include .files when moving things around
 shopt -s dotglob
 
@@ -78,7 +77,6 @@ if [[ -n "$SSH_BUNDLE_URL" && -n "$SSH_BUNDLE_PASSWORD" ]]; then
     cd $BUILD_DIR
 fi
 
-
 echo "Installing Composer binary"
 curl -s https://getcomposer.org/installer | $BUILD_DIR/bin/php -- --install-dir=bin
 mv bin/composer.phar bin/composer
@@ -125,26 +123,34 @@ if [ -d www/.heroku ]; then
   done
 fi
 
-# NEWRELIC
 if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
-echo "Launching NEWRELIC"
- sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/www/lib/Newrelicheroku/etc/newrelic.cfg
+ echo "Launching newrelic"
+ sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/local/newrelic-heroku/etc/newrelic.cfg
  sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/php/php.ini
-chmod +x /app/www/lib/Newrelicheroku/bin/newrelic-daemon
-exec /app/www/lib/Newrelicheroku/bin/newrelic-daemon -c /app/www/lib/Newrelicheroku/etc/newrelic.cfg -d error -l /dev/null
+ /app/local/newrelic-heroku/bin/newrelic-daemon -c /app/local/newrelic-heroku/etc/newrelic.cfg -l /dev/null
+else
+ echo "Launching newrelic error: No license key"
 fi
 
-
 echo "Launching PHP FPM"
-exec /app/php/sbin/php-fpm -y /app/php/etc/php-fpm.conf -c /app/php/php.ini
+/app/php/sbin/php-fpm -y /app/php/etc/php-fpm.conf -c /app/php/php.ini
 
 echo "Launching apache"
 exec /app/apache/bin/httpd -DNO_DETACH
 
 EOF
 
-chmod +x boot.sh
+# newrelic
+if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
+ echo "-----> Installing newrelic"
+ export ${NEW_RELIC_LICENSE_KEY}
+ tar zxvf $LP_DIR/src/newrelic-heroku.tgz -C ${BUILD_DIR}/local
+ sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" ${BUILD_DIR}/local/newrelic-heroku/etc/newrelic.cfg
+else
+ echo "Installing newrelic error: No license key"
+fi
 
+chmod +x boot.sh
 
 # clean the cache
 rm -rf $CACHE_DIR/*
