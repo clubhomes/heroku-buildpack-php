@@ -129,8 +129,8 @@ fi
 
 if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
  echo "Launching newrelic"
- sed -i "s|REPLACE_WITH_REAL_KEY|\$NEW_RELIC_LICENSE_KEY|g" /app/local/newrelic-heroku/etc/newrelic.cfg
- sed -i "s|REPLACE_WITH_REAL_KEY|\$NEW_RELIC_LICENSE_KEY|g" /app/php/php.ini
+ sed -i "s|REPLACE_WITH_REAL_KEY|NEW_RELIC_LICENSE_KEY_VAL|g" /app/local/newrelic-heroku/etc/newrelic.cfg
+ sed -i "s|REPLACE_WITH_REAL_KEY|NEW_RELIC_LICENSE_KEY_VAL|g" /app/php/php.ini
  /app/local/newrelic-heroku/bin/newrelic-daemon -c /app/local/newrelic-heroku/etc/newrelic.cfg -l /dev/null
 else
  echo "Launching newrelic error: No license key"
@@ -148,9 +148,11 @@ EOF
 if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
  echo "-----> Installing newrelic"
  tar zxvf $LP_DIR/src/newrelic-heroku.tgz -C ${BUILD_DIR}/local
+ sed -i "s|NEW_RELIC_LICENSE_KEY_VAL|\${NEW_RELIC_LICENSE_KEY}|g" boot.sh
 else
  echo "Installing newrelic error: No license key"
 fi
+
 
 chmod +x boot.sh
 
