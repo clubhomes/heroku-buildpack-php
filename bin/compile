@@ -128,13 +128,15 @@ fi
 # NEWRELIC
 if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
 echo "Launching NEWRELIC"
- chmod +x /app/www/lib/Newrelicheroku/bin/newrelic-daemon
- /app/www/lib/Newrelicheroku/bin/newrelic-daemon -c /app/www/lib/Newrelicheroku/etc/newrelic.cfg -d error -l /dev/null
+ sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/www/lib/Newrelicheroku/etc/newrelic.cfg
+ sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/php/php.ini
+chmod +x /app/www/lib/Newrelicheroku/bin/newrelic-daemon
+exec /app/www/lib/Newrelicheroku/bin/newrelic-daemon -c /app/www/lib/Newrelicheroku/etc/newrelic.cfg -d error -l /dev/null
 fi
 
 
 echo "Launching PHP FPM"
-/app/php/sbin/php-fpm -y /app/php/etc/php-fpm.conf -c /app/php/php.ini
+exec /app/php/sbin/php-fpm -y /app/php/etc/php-fpm.conf -c /app/php/php.ini
 
 echo "Launching apache"
 exec /app/apache/bin/httpd -DNO_DETACH
@@ -142,12 +144,6 @@ exec /app/apache/bin/httpd -DNO_DETACH
 EOF
 
 chmod +x boot.sh
-
-# NEWRELIC KEY
-if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
- sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/www/lib/Newrelicheroku/etc/newrelic.cfg
- sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/php/php.ini
-fi
 
 
 # clean the cache
