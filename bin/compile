@@ -127,9 +127,9 @@ fi
 # NEWRELIC
 if [ "\${NEW_RELIC_LICENSE_KEY}" ]; then
 echo "Launching NEWRELIC"
- sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/lib/Newrelicheroku/etc/newrelic.cfg
+ sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/www/lib/Newrelicheroku/etc/newrelic.cfg
  sed -i "s|REPLACE_WITH_REAL_KEY|${NEW_RELIC_LICENSE_KEY}|g" /app/php/php.ini
- /app/lib/Newrelicheroku/bin/newrelic-daemon -c /app/lib/Newrelicheroku/etc/newrelic.cfg -d error
+ /app/www/lib/Newrelicheroku/bin/newrelic-daemon -c /app/www/lib/Newrelicheroku/etc/newrelic.cfg -d error
 fi
 
 
